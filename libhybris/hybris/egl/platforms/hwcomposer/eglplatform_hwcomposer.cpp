@@ -28,6 +28,15 @@ extern "C" void hwcomposerws_init_module(struct ws_egl_interface *egl_iface)
 		assert(0);
 	}
 
+	if(getenv("HYBRIS_OPEN_FBDEV") != NULL) {
+		err = framebuffer_open((hw_module_t *) gralloc, &framebuffer);
+		if (err) {
+			fprintf(stderr, "ERROR: failed to open framebuffer: (%s)\n",strerror(-err));
+			assert(0);
+		}
+		TRACE("** framebuffer_open: status=(%s) format=x%x", strerror(-err), framebuffer->format);
+	}
+
 	err = gralloc_open((const hw_module_t *) gralloc, &alloc);
 	if (err) {
 		fprintf(stderr, "ERROR: failed to open gralloc: (%s)\n",strerror(-err));
